@@ -8,13 +8,12 @@ import repositories.UserRepositoryJDBCImpl;
 
 import javax.sql.DataSource;
 import java.util.InputMismatchException;
+import java.util.Properties;
 
 public class Userservice {
     private UserRepository repository;
     ConsoleReader consoleReader;
-    private String URL = "jdbc:mysql://localhost:3306/task_manager";
-    private String name = "root";
-    private String password = "0000";
+    private final String propertiesRoot = "src/main/resources/application.properties";
 
     void showAuthorisationMenu() {
         System.out.println("1. Registration");
@@ -29,18 +28,22 @@ public class Userservice {
      */
     public void useAuthorisationMenu() {
         consoleReader = new ConsoleReader(System.in);
-        showAuthorisationMenu();
-        int answer = 0;
-        try {
-            answer = consoleReader.readInteger();
-        } catch (InputMismatchException e) {
-            System.err.println("your input is not correct! You need to enter a number!!!");
-            useAuthorisationMenu();
-        }
+        int answer;
+        Properties properties = PropertiesSupplier.getProperties(propertiesRoot);
+        String URL = properties.getProperty("url");
+        String name = properties.getProperty("username");
+        String password = properties.getProperty("password");
         DataSource dataSource = new DriverManagerDataSource(URL, name, password);
         repository = new UserRepositoryJDBCImpl(dataSource);
         boolean isWorking = true;
         while (isWorking) {
+            showAuthorisationMenu();
+            try {
+                answer = consoleReader.readInteger();
+            } catch (InputMismatchException e) {
+                System.err.println("your input is not correct! You need to enter a number!!!");
+                continue;
+            }
             switch (answer) {
                 case 1:
                     makeRegistration();
@@ -49,8 +52,6 @@ public class Userservice {
                     if (checkUserAutorisation()) {
                         System.out.println("Authorisation is successful!");
                         return;
-                    } else {
-                        isWorking = false;
                     }
                 case 3:
                     System.out.println("Thanks for using our Task Manager!");
@@ -83,7 +84,6 @@ public class Userservice {
     /**
      * method checks that password is correct for chosen login
      *
-     * @return
      */
     boolean checkUserAutorisation() {
         System.out.print("Enter your login");

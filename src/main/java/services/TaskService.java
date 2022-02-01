@@ -7,16 +7,17 @@ import repositories.TaskRepository;
 import repositories.TaskRepositoryJDBCImpl;
 
 import javax.sql.DataSource;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
+import java.util.Properties;
 
 public class TaskService {
     private ConsoleReader consoleReader;
     private TaskRepository repository;
-    private final String URL = "jdbc:mysql://localhost:3306/task_manager";
-    private final String name = "root";
-    private final String password = "0000";
+    private final String propertiesRoot = "src/main/resources/application.properties";
 
     private void showMainMenu() {
         System.out.println("Please, choose action from the following list:");
@@ -31,6 +32,10 @@ public class TaskService {
      * this method handles all user actions and defines all logic of the app
      */
     public void actionMenu() {
+        Properties properties = PropertiesSupplier.getProperties(propertiesRoot);
+        String URL = properties.getProperty("url");
+        String name = properties.getProperty("username");
+        String password = properties.getProperty("password");
         DataSource dataSource = new DriverManagerDataSource(URL, name, password);
         repository = new TaskRepositoryJDBCImpl(dataSource);
         Thread thread = new TaskChecker();
@@ -48,15 +53,9 @@ public class TaskService {
                     Task task = createNewTask();
                     repository.save(task);
                 }
-                case 2 -> {
-                    createSubTask();
-                }
-                case 3 -> {
-                    getAllUndoneTasks();
-                }
-                case 4 -> {
-                    markTaskAsDone();
-                }
+                case 2 -> createSubTask();
+                case 3 -> getAllUndoneTasks();
+                case 4 -> markTaskAsDone();
                 case 5 -> {
                     System.out.println("Thanks for using the Task manager");
                     isWorking = false;
