@@ -3,7 +3,7 @@ package models;
 import java.time.LocalDateTime;
 
 /**
- * this class is fundamental in our app and describes general quantities of our task
+ * this class is fundamental in the app and describes general quantities of our task
  */
 public class Task {
     Integer id;
@@ -12,7 +12,6 @@ public class Task {
     LocalDateTime deadline;
     Boolean isDone;
     Task parent;
-
 
     public Task(String description, LocalDateTime creationDate, LocalDateTime deadline) {
         this.description = description;

@@ -3,7 +3,6 @@ package repositories;
 import models.Task;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
-
 import javax.sql.DataSource;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -84,7 +83,6 @@ public class TaskRepositoryJDBCImpl implements TaskRepository {
         return jdbcTemplate.query(SELECT_FROM_TASK_BY_PARENT_ID, rowMapper, task.getId());
     }
 
-
     /**
      * this searches task by its id
      *
@@ -106,12 +104,11 @@ public class TaskRepositoryJDBCImpl implements TaskRepository {
         jdbcTemplate.update(UPDATE_TASK_SET_TASK_DONE, id);
     }
 
-
     /**
      * this method is used in rowMapper to parse the String-format date into LocalDateTime
      *
      * @param string - string from database which defines the date
-     * @return
+     * @return - date and time in LocalDate format
      */
     LocalDateTime parseString(String string) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");

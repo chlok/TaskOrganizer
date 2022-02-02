@@ -7,7 +7,6 @@ import java.util.List;
 public interface TaskRepository {
     void save(Task task);
 
-
     List<Task> getAllToDo();
 
     List<Task> getAllByParentId(Task task);

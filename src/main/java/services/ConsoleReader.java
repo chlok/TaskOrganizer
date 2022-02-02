@@ -29,7 +29,6 @@ public class ConsoleReader {
             System.out.println("your input is not a number! try again");
         }
         return 0;
-
     }
 
     LocalDateTime readLocaleDateTime() {
@@ -56,8 +55,6 @@ public class ConsoleReader {
             } catch (Exception e) {
                 System.out.println("your input is not correct! try again!");
             }
-
         }
     }
-
 }

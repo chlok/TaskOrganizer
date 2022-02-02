@@ -13,7 +13,7 @@ import java.util.Properties;
 public class Userservice {
     private UserRepository repository;
     ConsoleReader consoleReader;
-    private final String propertiesRoot = "src/main/resources/application.properties";
+    private final String propertiesRoot = "src\\main\\resources\\application.properties";
 
     void showAuthorisationMenu() {
         System.out.println("1. Registration");
@@ -29,7 +29,7 @@ public class Userservice {
     public void useAuthorisationMenu() {
         consoleReader = new ConsoleReader(System.in);
         int answer;
-        Properties properties = PropertiesSupplier.getProperties(propertiesRoot);
+        Properties properties = new PropertiesSupplier().getProperties();
         String URL = properties.getProperty("url");
         String name = properties.getProperty("username");
         String password = properties.getProperty("password");
@@ -53,9 +53,11 @@ public class Userservice {
                         System.out.println("Authorisation is successful!");
                         return;
                     }
+                    break;
                 case 3:
                     System.out.println("Thanks for using our Task Manager!");
                     isWorking = false;
+                    break;
                 default:
                     System.out.println("your number is not correct! Please try again!");
             }
@@ -66,7 +68,7 @@ public class Userservice {
      * method is responsible for user registration
      */
     private void makeRegistration() {
-        System.out.print("Enter your login");
+        System.out.print("Enter your login ");
         String login = consoleReader.readString();
         try {
             User user = repository.getUserByLogin(login);
@@ -74,7 +76,7 @@ public class Userservice {
             return;
         } catch (EmptyResultDataAccessException e) {
         }
-        System.out.print("Enter your password");
+        System.out.print("Enter your password ");
         String password = consoleReader.readString();
         repository.save(new User(login, password));
         System.out.println("Registration is successful");
@@ -83,20 +85,19 @@ public class Userservice {
 
     /**
      * method checks that password is correct for chosen login
-     *
      */
     boolean checkUserAutorisation() {
-        System.out.print("Enter your login");
+        System.out.print("Enter your login ");
         String login = consoleReader.readString();
 
         try {
             User user = repository.getUserByLogin(login);
         } catch (EmptyResultDataAccessException e) {
             System.err.println("such login doesn't exist!!!");
-            System.out.println("choose another login: ");
+            return false;
 
         }
-        System.out.print("Enter your password");
+        System.out.print("Enter your password ");
         String password = consoleReader.readString();
         User user = new User(login, password);
         if (user.getPassword().equals(password)) {

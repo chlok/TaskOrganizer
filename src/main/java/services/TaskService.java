@@ -17,7 +17,6 @@ import java.util.Properties;
 public class TaskService {
     private ConsoleReader consoleReader;
     private TaskRepository repository;
-    private final String propertiesRoot = "src/main/resources/application.properties";
 
     private void showMainMenu() {
         System.out.println("Please, choose action from the following list:");
@@ -32,7 +31,7 @@ public class TaskService {
      * this method handles all user actions and defines all logic of the app
      */
     public void actionMenu() {
-        Properties properties = PropertiesSupplier.getProperties(propertiesRoot);
+        Properties properties = new PropertiesSupplier().getProperties();
         String URL = properties.getProperty("url");
         String name = properties.getProperty("username");
         String password = properties.getProperty("password");

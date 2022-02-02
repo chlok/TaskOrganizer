@@ -2,15 +2,17 @@ package services;
 
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Properties;
 
 public class PropertiesSupplier {
-    private static final String propertiesRoot = "src/main/resources/application.properties";
+    private static final String propertiesRoot = "/application.properties";
 
-    public static Properties getProperties(String root) {
+    public Properties getProperties() {
         Properties properties = new Properties();
         try {
-            properties.load(new FileInputStream(propertiesRoot));
+            InputStream stream = getClass().getResourceAsStream(propertiesRoot);
+            properties.load(stream);
         } catch (IOException e) {
             e.printStackTrace();
         }

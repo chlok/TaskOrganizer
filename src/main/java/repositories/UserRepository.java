@@ -6,5 +6,4 @@ public interface UserRepository {
     void save(User user);
 
     User getUserByLogin(String login);
-
 }
